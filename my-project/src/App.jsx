@@ -1,5 +1,5 @@
 import { AuthProvider, useAuth } from "./contexts/AuthContext"
-import Login from "./components/Login"
+import AuthForm from "./components/AuthForm"
 import ERPSystem from "./components/ERPSystem"
 
 function AppContent() {
@@ -16,7 +16,7 @@ function AppContent() {
     )
   }
 
-  return isAuthenticated ? <ERPSystem /> : <Login />
+  return isAuthenticated ? <ERPSystem /> : <AuthForm />
 }
 
 export default function App() {
@@ -26,4 +26,3 @@ export default function App() {
     </AuthProvider>
   )
 }
-

@@ -6,52 +6,102 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
 
-  
-  const mockUsers = [
-    { id: 1, email: "admin@erp.com", password: "admin123", name: "Admin User", role: "admin" },
-    { id: 2, email: "manager@erp.com", password: "manager123", name: "Manager User", role: "manager" },
-    { id: 3, email: "staff@erp.com", password: "staff123", name: "Staff User", role: "staff" },
-  ]
-
   useEffect(() => {
-    const savedUser = localStorage.getItem("erpUser")
+    const savedUser = localStorage.getItem("erpCurrentUser")
     if (savedUser) {
       setUser(JSON.parse(savedUser))
     }
     setIsLoading(false)
   }, [])
 
+  // Get all registered users from localStorage
+  const getRegisteredUsers = () => {
+    const users = localStorage.getItem("erpRegisteredUsers")
+    return users ? JSON.parse(users) : []
+  }
+
+  // Save user to registered users list
+  const saveUserToStorage = (userData) => {
+    const existingUsers = getRegisteredUsers()
+    const updatedUsers = [...existingUsers, userData]
+    localStorage.setItem("erpRegisteredUsers", JSON.stringify(updatedUsers))
+  }
+
+  // Check if email already exists
+  const emailExists = (email) => {
+    const users = getRegisteredUsers()
+    return users.some((user) => user.email.toLowerCase() === email.toLowerCase())
+  }
+
+  // Signup function
+  const signup = async (userData) => {
+    setIsLoading(true)
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+
+      // Check if email already exists
+      if (emailExists(userData.email)) {
+        setIsLoading(false)
+        return { success: false, message: "Email already exists!" }
+      }
+
+      // Create new user
+      const newUser = {
+        id: Date.now(),
+        name: userData.name,
+        email: userData.email.toLowerCase(),
+        password: userData.password,
+        role: userData.role || "staff", // Default role
+        createdAt: new Date().toISOString(),
+      }
+
+      // Save to localStorage
+      saveUserToStorage(newUser)
+
+      setIsLoading(false)
+      return { success: true, message: "Account created successfully!" }
+    } catch (error) {
+      console.error("Signup error:", error)
+      setIsLoading(false)
+      return { success: false, message: "Something went wrong!" }
+    }
+  }
+
+  // Login function
   const login = async (email, password) => {
     setIsLoading(true)
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000))
 
-      const foundUser = mockUsers.find((u) => u.email === email && u.password === password)
+      const users = getRegisteredUsers()
+      const foundUser = users.find((u) => u.email.toLowerCase() === email.toLowerCase() && u.password === password)
+
       if (foundUser) {
         const userData = { ...foundUser }
-        delete userData.password
+        delete userData.password // Remove password from user object
         setUser(userData)
-        localStorage.setItem("erpUser", JSON.stringify(userData))
+        localStorage.setItem("erpCurrentUser", JSON.stringify(userData))
         setIsLoading(false)
-        return true
+        return { success: true }
       }
 
       setIsLoading(false)
-      return false
+      return { success: false, message: "Invalid email or password!" }
     } catch (error) {
       console.error("Login error:", error)
       setIsLoading(false)
-      return false
+      return { success: false, message: "Something went wrong!" }
     }
   }
 
   const logout = () => {
     setUser(null)
-    localStorage.removeItem("erpUser")
+    localStorage.removeItem("erpCurrentUser")
   }
 
   const value = {
     user,
+    signup,
     login,
     logout,
     isLoading,

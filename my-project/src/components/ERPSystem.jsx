@@ -30,9 +30,13 @@ function ERPContent() {
   }
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-gray-50 overflow-hidden">
       <Sidebar activeModule={activeModule} setActiveModule={setActiveModule} />
-      <div className="flex-1 overflow-auto">{renderModule()}</div>
+      <div className="flex-1 overflow-auto">
+        <div className="min-h-full">
+          {renderModule()}
+        </div>
+      </div>
     </div>
   )
 }
