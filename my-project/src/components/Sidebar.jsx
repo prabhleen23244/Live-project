@@ -6,7 +6,7 @@ export default function Sidebar({ activeModule, setActiveModule }) {
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [showLogoutModal, setShowLogoutModal] = useState(false)
   const [showProfileModal, setShowProfileModal] = useState(false)
-  const [isLoggingOut, setIsLoggingOut] = useState(false)
+  const [isLoggingOut, setIsLoggingOut] =  useState(false)
 
   const modules = [
     { 

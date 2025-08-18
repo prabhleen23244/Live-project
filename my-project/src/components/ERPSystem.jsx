@@ -45,6 +45,6 @@ export default function ERPSystem() {
   return (
     <ERPProvider>
       <ERPContent />
-    </ERPProvider>
+    </ERPProvider> 
   )
 }
