@@ -31,6 +31,12 @@ export default function Login() {
             <p className="text-gray-600 mt-2">Enterprise Resource Planning</p>
           </div>
 
+
+          
+
+
+         
+
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">{error}</div>}
 
@@ -43,16 +49,22 @@ export default function Login() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+
                 placeholder="Enter your email"
                 disabled={isLoading}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100"
-              />
+              /> 
+              
             </div>
+            
 
-            <div>
+            <div> 
+
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
                 Password
               </label>
+
+              
               <input
                 id="password"
                 type="password"
@@ -67,6 +79,7 @@ export default function Login() {
             <button
               type="submit"
               disabled={isLoading}
+
               className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
             >
               {isLoading ? "Signing in..." : "Sign In"}
